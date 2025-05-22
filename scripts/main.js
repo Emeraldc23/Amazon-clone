@@ -48,11 +48,10 @@ products.forEach((product) => {
           <p class="added-msg"></p>
           <button class="add-to-cart-button button-primary js-add-to-cart" 
           data-prod-id = "${product.id}"
-          data-prodPrice = "${product.priceCents}"
+          data-prod-Price = "${product.priceCents}"
           >Add to Cart</button>
         </div>
     `
-
    
 });
 document.querySelector('.js-products-section').innerHTML = productHtml
@@ -63,7 +62,7 @@ let timeOutId;
 document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
     btn.addEventListener('click', ()=>{
     let prod_Id = btn.dataset.prodId;
-    let prod_price = btn.dataset.prodprice;
+    let prod_price = btn.dataset.prodPrice;
     
 
     let isProductAval;
@@ -71,7 +70,7 @@ document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
         console.log(item.id);
         if(prod_Id === item.id){
             isProductAval = item
-            console.log((item.price));
+            /* console.log(Number(item.price * item.quantity)); */
         } 
     })
 
@@ -81,13 +80,19 @@ document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
          cart.push(
         {
             id: prod_Id,
-            price: `$${(prod_price / 100).toFixed(2)}`,
+            price: `${(prod_price / 100).toFixed(2)}`,
             quantity: 1,
         })  
     }
-      console.log(cart);
+      
 
-   
+    let cartQuantity = 0;
+    cart.forEach((item)=>{
+        cartQuantity += item.quantity;
+    });
+
+    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
+
    
 
    /*  let addBtn = document.querySelector('.added-msg')
