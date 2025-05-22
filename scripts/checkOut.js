@@ -1,5 +1,6 @@
 import { products } from "../data/products.js"
 import { cart } from "../data/cart.js";
+import { priceInCent } from "./utility/price.js";
 
 
 let checkOutHtml = ' ';
@@ -24,7 +25,7 @@ cart.forEach((checkOutItems)=>{
 
               <div class="cart-item-details">
                 <div class="product-name">${matchingId.prodName}</div>
-                <div class="product-price">$${(matchingId.priceCents / 100).toFixed(2)}</div>
+                <div class="product-price">$${priceInCent(matchingId.priceCents)}</div>
                 <div class="product-quantity">
                   <span> Quantity: <span class="quantity-label">${checkOutItems.quantity}</span> </span>
                   <span class="update-quantity-link link-primary">
@@ -45,7 +46,7 @@ cart.forEach((checkOutItems)=>{
                   <input
                     type="radio"
                     class="delivery-option-input"
-                    name="delivery-option-2"
+                    name="delivery-option-${matchingId.id}"
                   />
                   <div>
                     <div class="delivery-option-date">Tuesday, June 21</div>
@@ -57,7 +58,7 @@ cart.forEach((checkOutItems)=>{
                     type="radio"
                     checked
                     class="delivery-option-input"
-                    name="delivery-option-2"
+                    name="delivery-option-${matchingId.id}"
                   />
                   <div>
                     <div class="delivery-option-date">Wednesday, June 15</div>
@@ -68,7 +69,7 @@ cart.forEach((checkOutItems)=>{
                   <input
                     type="radio"
                     class="delivery-option-input"
-                    name="delivery-option-2"
+                    name="delivery-option-${matchingId.id}"
                   />
                   <div>
                     <div class="delivery-option-date">Monday, June 13</div>
