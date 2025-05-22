@@ -45,11 +45,59 @@ products.forEach((product) => {
             Added
           </div>
 
-          <button class="add-to-cart-button button-primary">Add to Cart</button>
+          <p class="added-msg"></p>
+          <button class="add-to-cart-button button-primary js-add-to-cart" 
+          data-prod-id = "${product.id}"
+          data-prodPrice = "${product.priceCents}"
+          >Add to Cart</button>
         </div>
     `
-    console.log(productHtml);
-     document.querySelector('.js-products-section').innerHTML = productHtml
+
+   
 });
+document.querySelector('.js-products-section').innerHTML = productHtml
 
+ 
+let timeOutId;
 
+document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
+    btn.addEventListener('click', ()=>{
+    let prod_Id = btn.dataset.prodId;
+    let prod_price = btn.dataset.prodprice;
+    
+
+    let isProductAval;
+    cart.forEach(item=>{
+        console.log(item.id);
+        if(prod_Id === item.id){
+            isProductAval = item
+            console.log((item.price));
+        } 
+    })
+
+    if(isProductAval){
+        isProductAval.quantity++;
+    } else{
+         cart.push(
+        {
+            id: prod_Id,
+            price: `$${(prod_price / 100).toFixed(2)}`,
+            quantity: 1,
+        })  
+    }
+      console.log(cart);
+
+   
+   
+
+   /*  let addBtn = document.querySelector('.added-msg')
+    addBtn.innerHTML = "added"
+    console.log(addBtn);
+    
+    clearTimeout(timeOutId);
+    
+    timeOutId = setTimeout(()=>{
+        document.querySelector('.added-msg').innerHTML = ''
+    }, 2000) */
+    })
+})
