@@ -96,16 +96,18 @@ document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
 
     document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
 
+    const showAddedMsg = document.querySelector(`.js-add-${prodId}`);
+    showAddedMsg.classList.add('display-added-msg');
 
-   let timeOutId;
-   /*  let addBtn = document.querySelector('.added-msg')
-    addBtn.innerHTML = "added"
-    console.log(addBtn);
+   const checkPreviousTimeOut = checkTimeOut[prodId]
+
+   if(checkPreviousTimeOut){
+    clearInterval(checkPreviousTimeOut);
+   }
     
-    clearTimeout(timeOutId);
-    
-    timeOutId = setTimeout(()=>{
-        document.querySelector('.added-msg').innerHTML = ''
-    }, 2000) */
+    const timeOutId = setTimeout(()=>{
+        showAddedMsg.classList.remove('display-added-msg');
+    }, 2000) 
+    checkTimeOut[prodId] = timeOutId
     })
 })
