@@ -1,4 +1,4 @@
-import {cart} from "../data/cart.js";
+import {cart, addCartItems} from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productHtml = ' ';
@@ -59,45 +59,29 @@ products.forEach((product) => {
 });
 document.querySelector('.js-products-section').innerHTML = productHtml
 
- 
+ function loadCartQuantity(){
+  let cartQuantity = 0;
+    cart.forEach((cartItems)=>{
+        cartQuantity += cartItems.quantity;
+    });
+
+    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
+ }
+    
 let checkTimeOut = {};
+
+
 
 document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
     btn.addEventListener('click', ()=>{
     let {prodId} = btn.dataset;
-    let prod_price = btn.dataset.prodPrice;
+    let {prodPrice} = btn.dataset;
     
 
-    let isProductAval;
-    cart.forEach(item=>{
-        console.log(item.id);
-        if(prodId === item.id){
-            isProductAval = item
-            /* console.log(Number(item.price * item.quantity)); */
-        } 
-    })
 
-    const selectQuantity = document.querySelector(`.js-selected-${prodId}`);
-    let quantity = Number(selectQuantity.value);
+    addCartItems(prodId, prodPrice);
+    loadCartQuantity()
 
-    if(isProductAval){
-        isProductAval.quantity += quantity;
-    } else{
-         cart.push(
-        {
-            id: prodId,
-            price: `${(prod_price / 100).toFixed(2)}`,
-            quantity,
-        })  
-    }
-      
-
-    let cartQuantity = 0;
-    cart.forEach((item)=>{
-        cartQuantity += item.quantity;
-    });
-
-    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
 
     const showAddedMsg = document.querySelector(`.js-add-${prodId}`);
     showAddedMsg.classList.add('display-added-msg');
