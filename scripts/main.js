@@ -24,7 +24,7 @@ products.forEach((product) => {
           <div class="product-price">$${(product.priceCents / 100).toFixed(2)}</div>
 
           <div class="product-quantity-container">
-            <select>
+            <select class="js-selected-${product.id}">
               <option selected value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
@@ -40,7 +40,7 @@ products.forEach((product) => {
 
           <div class="product-spacer"></div>
 
-          <div class="added-to-cart">
+          <div class="added-to-cart js-add-${product.id}">
             <img src="images/icons/checkmark.png" />
             Added
           </div>
@@ -57,31 +57,34 @@ products.forEach((product) => {
 document.querySelector('.js-products-section').innerHTML = productHtml
 
  
-let timeOutId;
+let checkTimeOut = {};
 
 document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
     btn.addEventListener('click', ()=>{
-    let prod_Id = btn.dataset.prodId;
+    let {prodId} = btn.dataset;
     let prod_price = btn.dataset.prodPrice;
     
 
     let isProductAval;
     cart.forEach(item=>{
         console.log(item.id);
-        if(prod_Id === item.id){
+        if(prodId === item.id){
             isProductAval = item
             /* console.log(Number(item.price * item.quantity)); */
         } 
     })
 
+    const selectQuantity = document.querySelector(`.js-selected-${prodId}`);
+    let quantity = Number(selectQuantity.value);
+
     if(isProductAval){
-        isProductAval.quantity++;
+        isProductAval.quantity += quantity;
     } else{
          cart.push(
         {
-            id: prod_Id,
+            id: prodId,
             price: `${(prod_price / 100).toFixed(2)}`,
-            quantity: 1,
+            quantity,
         })  
     }
       
@@ -93,8 +96,8 @@ document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
 
     document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
 
-   
 
+   let timeOutId;
    /*  let addBtn = document.querySelector('.added-msg')
     addBtn.innerHTML = "added"
     console.log(addBtn);
