@@ -1,5 +1,5 @@
 import { products } from "../data/products.js"
-import { cart } from "../data/cart.js";
+import { cart, deleteFromCart } from "../data/cart.js";
 import { priceInCent } from "./utility/price.js";
 
 
@@ -22,7 +22,6 @@ cart.forEach((checkOutItems)=>{
               <img
                 class="product-image" src="${matchingId.image}"
               />
-
               <div class="cart-item-details">
                 <div class="product-name">${matchingId.prodName}</div>
                 <div class="product-price">$${priceInCent(matchingId.priceCents)}</div>
@@ -31,7 +30,7 @@ cart.forEach((checkOutItems)=>{
                   <span class="update-quantity-link link-primary">
                     Update
                   </span>
-                  <span class="delete-quantity-link link-primary">
+                  <span class="delete-quantity-link link-primary js-delete-btn" data-product-id = ${matchingId.id}>
                     Delete
                   </span>
                 </div>
@@ -79,7 +78,17 @@ cart.forEach((checkOutItems)=>{
               </div>
             </div>
         </div>
-        `
+        `   
 });
 
-document.querySelector('.js-checkOut-products').innerHTML = checkOutHtml
+document.querySelector('.js-checkOut-products').innerHTML = checkOutHtml;
+
+
+document.querySelectorAll(".js-delete-btn")
+    .forEach(delItem=>{
+        delItem.addEventListener('click', ()=>{
+            let productId = delItem.dataset.productId;
+            deleteFromCart(productId);
+        })
+    })
+
