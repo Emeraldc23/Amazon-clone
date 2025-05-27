@@ -209,3 +209,21 @@
   margin-top: 11px;
   margin-bottom: 15px;
 }
+
+.input-quantity {
+  width: 30px;
+  display: none;
+}
+
+.save-quantity-link {
+  display: none;
+}
+.is-display-link .input-quantity {
+  display: initial;
+}
+.is-display-link .save-quantity-link {
+  display: initial;
+}
+.remove-update-text {
+  display: none;
+}

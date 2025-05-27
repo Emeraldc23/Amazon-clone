@@ -1,10 +1,10 @@
-import {cart, addCartItems} from "../data/cart.js";
+import { cart, addCartItems, loadCartQuantity } from "../data/cart.js";
 import { products } from "../data/products.js";
 import { priceInCent } from "./utility/price.js";
 
-let productHtml = ' ';
+let productHtml = " ";
 products.forEach((product) => {
-    productHtml += `
+  productHtml += `
     <div class="product-container">
           <div class="product-image-container">
             <img
@@ -20,9 +20,11 @@ products.forEach((product) => {
           <div class="product-rating-container">
             <img
               class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars*10}.png"
+              src="images/ratings/rating-${product.rating.stars * 10}.png"
             />
-            <div class="product-rating-count link-primary">${product.rating.count}</div>
+            <div class="product-rating-count link-primary">${
+              product.rating.count
+            }</div>
           </div>
 
           <div class="product-price">$${priceInCent(product.priceCents)}</div>
@@ -55,47 +57,32 @@ products.forEach((product) => {
           data-prod-Price = "${product.priceCents}"
           >Add to Cart</button>
         </div>
-    `
-   
+    `;
 });
-document.querySelector('.js-products-section').innerHTML = productHtml
+document.querySelector(".js-products-section").innerHTML = productHtml;
 
- function loadCartQuantity(){
-  let cartQuantity = 0;
-    cart.forEach((cartItems)=>{
-        cartQuantity += cartItems.quantity;
-    });
-
-    document.querySelector('.js-cart-quantity').innerHTML = cartQuantity
- }
-    
 let checkTimeOut = {};
-
-
-
-document.querySelectorAll('.js-add-to-cart').forEach((btn)=>{
-    btn.addEventListener('click', ()=>{
-    let {prodId} = btn.dataset;
-    let {prodPrice} = btn.dataset;
-    
-
+loadCartQuantity();
+document.querySelectorAll(".js-add-to-cart").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    let { prodId } = btn.dataset;
+    let { prodPrice } = btn.dataset;
 
     addCartItems(prodId, prodPrice);
-    loadCartQuantity()
-
+    loadCartQuantity();
 
     const showAddedMsg = document.querySelector(`.js-add-${prodId}`);
-    showAddedMsg.classList.add('display-added-msg');
+    showAddedMsg.classList.add("display-added-msg");
 
-   const checkPreviousTimeOut = checkTimeOut[prodId]
+    const checkPreviousTimeOut = checkTimeOut[prodId];
 
-   if(checkPreviousTimeOut){
-    clearInterval(checkPreviousTimeOut);
-   }
-    
-    const timeOutId = setTimeout(()=>{
-        showAddedMsg.classList.remove('display-added-msg');
-    }, 2000) 
-    checkTimeOut[prodId] = timeOutId
-    })
-})
+    if (checkPreviousTimeOut) {
+      clearInterval(checkPreviousTimeOut);
+    }
+
+    const timeOutId = setTimeout(() => {
+      showAddedMsg.classList.remove("display-added-msg");
+    }, 2000);
+    checkTimeOut[prodId] = timeOutId;
+  });
+});
