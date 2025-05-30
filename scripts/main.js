@@ -27,7 +27,7 @@ products.forEach((product) => {
             }</div>
           </div>
 
-          <div class="product-price">$${priceInCent(product.priceCents)}</div>
+          <div class="product-price">${priceInCent(product.priceCents)}</div>
 
           <div class="product-quantity-container">
             <select class="js-selected-${product.id}">

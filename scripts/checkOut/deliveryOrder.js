@@ -1,4 +1,4 @@
-import { products } from "../../data/products.js";
+import { products, getProductId } from "../../data/products.js";
 import {
   cart,
   deleteFromCart,
@@ -8,7 +8,10 @@ import {
 } from "../../data/cart.js";
 import { priceInCent } from "../utility/price.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-import { deliveryOption } from "../../data/deliveryOption.js";
+import {
+  deliveryOption,
+  deliveryOptionCost,
+} from "../../data/deliveryOption.js";
 
 const todayDate = dayjs();
 const addDate = todayDate.add(7, "days");
@@ -19,21 +22,10 @@ export function modifyViewPage() {
   let checkOutHtml = " ";
   cart.forEach((checkOutItems) => {
     const product = checkOutItems.id;
-
-    let matchingId;
-    products.forEach((items) => {
-      if (items.id === product) {
-        matchingId = items;
-      }
-    });
+    const matchingId = getProductId(product);
 
     const deliveryOptionId = checkOutItems.deliveryId;
-    let options;
-    deliveryOption.forEach((deliveryItem) => {
-      if (deliveryItem.id === deliveryOptionId) {
-        options = deliveryItem;
-      }
-    });
+    const options = deliveryOptionCost(deliveryOptionId);
 
     const todayDate = dayjs();
     const deliveryDate = todayDate.add(options.deliveryDays, "days");
@@ -50,7 +42,7 @@ export function modifyViewPage() {
               />
               <div class="cart-item-details">
                 <div class="product-name">${matchingId.prodName}</div>
-                <div class="product-price">$${priceInCent(
+                <div class="product-price">${priceInCent(
                   matchingId.priceCents
                 )}</div>
                 <div class="product-quantity">
@@ -102,7 +94,7 @@ export function modifyViewPage() {
       const costPrice =
         deliveryItem.priceCents === 0
           ? "FREE - "
-          : `$${priceInCent(deliveryItem.priceCents)} - `;
+          : `${priceInCent(deliveryItem.priceCents)} - `;
 
       const isChecked = deliveryItem.id === checkOutItems.deliveryId;
       priceHTML += `
