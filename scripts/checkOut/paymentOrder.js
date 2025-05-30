@@ -66,12 +66,13 @@ export function paymentOrder() {
     `;
 
   document.querySelector(".js-payment-order").innerHTML = html;
-}
 
-function updateProductQuantity() {
-  let cartQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
-  });
-  return `Items (${cartQuantity})`;
+  function updateProductQuantity() {
+    let cartQuantity = 0;
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
+    return `Items (${cartQuantity})`;
+  }
 }
+paymentOrder();

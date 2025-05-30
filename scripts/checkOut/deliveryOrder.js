@@ -12,11 +12,7 @@ import {
   deliveryOption,
   deliveryOptionCost,
 } from "../../data/deliveryOption.js";
-
-const todayDate = dayjs();
-const addDate = todayDate.add(7, "days");
-const deliveryDate = addDate.format("dddd, MMMM D");
-console.log(deliveryDate);
+import { paymentOrder } from "./paymentOrder.js";
 
 export function modifyViewPage() {
   let checkOutHtml = " ";
@@ -128,6 +124,7 @@ export function modifyViewPage() {
       );
       cartContainer.remove();
       checkOutBox();
+      paymentOrder();
     });
   });
 
@@ -172,6 +169,7 @@ export function modifyViewPage() {
       updateCartQuantity(productId, getQualityInput);
       saveCartToStorage();
       validateInput(getQualityInput);
+      paymentOrder();
     });
     // enter key option
     cartContainer.addEventListener("keydown", (event) => {
@@ -193,6 +191,7 @@ export function modifyViewPage() {
         updateCartQuantity(productId, getQualityInput);
         saveCartToStorage();
         validateInput(getQualityInput);
+        paymentOrder();
       }
     });
   });
@@ -224,6 +223,7 @@ export function modifyViewPage() {
       const { productId, deliveryId } = deliveryItem.dataset;
       updateDeliveryOption(productId, deliveryId);
       modifyViewPage();
+      paymentOrder();
     });
   });
 }
