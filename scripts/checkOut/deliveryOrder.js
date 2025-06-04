@@ -13,6 +13,7 @@ import {
   deliveryOptionCost,
 } from "../../data/deliveryOption.js";
 import { paymentOrder } from "./paymentOrder.js";
+import { getDeliveryDays } from "../../data/deliveryOption.js";
 
 export function modifyViewPage() {
   let checkOutHtml = " ";
@@ -22,15 +23,14 @@ export function modifyViewPage() {
 
     const deliveryOptionId = checkOutItems.deliveryId;
     const options = deliveryOptionCost(deliveryOptionId);
-
-    const todayDate = dayjs();
-    const deliveryDate = todayDate.add(options.deliveryDays, "days");
-    const currentDay = deliveryDate.format("dddd, MMMM D");
+    getDeliveryDays(options);
 
     checkOutHtml += `
         <div class="cart-item-container 
         js-cart-container-${matchingId.id}">
-            <div class="delivery-date">Delivery date: ${currentDay}</div>
+            <div class="delivery-date">Delivery date: ${getDeliveryDays(
+              options
+            )}</div>
 
             <div class="cart-item-details-grid">
               <img
@@ -83,9 +83,7 @@ export function modifyViewPage() {
   function deliveryOptions(matchingId, checkOutItems) {
     let priceHTML = "";
     deliveryOption.forEach((deliveryItem) => {
-      const todayDate = dayjs();
-      const deliveryDate = todayDate.add(deliveryItem.deliveryDays, "days");
-      const currentDay = deliveryDate.format("dddd, MMMM D");
+      getDeliveryDays(deliveryItem);
 
       const costPrice =
         deliveryItem.priceCents === 0
@@ -103,7 +101,9 @@ export function modifyViewPage() {
                     name="delivery-option-${matchingId.id}"
                   />
                   <div>
-                    <div class="delivery-option-date">${currentDay}</div>
+                    <div class="delivery-option-date">${getDeliveryDays(
+                      deliveryItem
+                    )}</div>
                     <div class="delivery-option-price">${costPrice}Shipping</div>
                   </div> 
                 </div>

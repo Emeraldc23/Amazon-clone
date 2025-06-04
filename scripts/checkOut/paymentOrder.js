@@ -18,11 +18,8 @@ export function paymentOrder() {
     shippingCost += options.priceCents;
   });
   beforeTaxCost = cost + shippingCost;
-  console.log(beforeTaxCost);
   const estimatedTaxCost = beforeTaxCost * 0.1;
-  console.log(estimatedTaxCost.toFixed(2));
   const orderTotalCost = beforeTaxCost + estimatedTaxCost;
-  console.log(orderTotalCost);
 
   shippingCost = html += `
             <div class="payment-summary-title">Order Summary</div>
