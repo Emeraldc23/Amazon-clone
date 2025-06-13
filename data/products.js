@@ -1,3 +1,5 @@
+import { priceInCent } from "../scripts/utility/price.js";
+
 export function getProductId(productId) {
   let matchingId;
   products.forEach((productItem) => {
@@ -7,6 +9,74 @@ export function getProductId(productId) {
   });
   return matchingId;
 }
+
+class Products {
+  id;
+  image;
+  prodName;
+  rating;
+  priceCents;
+
+  constructor(prodDetails) {
+    this.id = prodDetails.id;
+    this.image = prodDetails.image;
+    this.prodName = prodDetails.prodName;
+    this.rating = prodDetails.rating;
+    this.priceCents = prodDetails.priceCents;
+  }
+  getRating() {
+    return `images/ratings/rating-${this.rating.stars * 10}.png`;
+  }
+  getPrice() {
+    return `${priceInCent(this.priceCents)}`;
+  }
+  getNewHtml() {
+    return "";
+  }
+}
+
+class Clothing extends Products {
+  sizeChartLink;
+  constructor(prodDetails) {
+    super(prodDetails);
+    this.sizeChartLink = prodDetails.sizeChartLink;
+  }
+
+  getNewHtml() {
+    return `<a href="${this.sizeChartLink}" target="_blank">Size Chart </a>`;
+  }
+}
+
+class Applicance extends Products {
+  instructionsLink;
+  warrantyLink;
+  constructor(prodDetails) {
+    super(prodDetails);
+    this.instructionsLink = prodDetails.instructionsLink;
+    this.warrantyLink = prodDetails.warrantyLink;
+  }
+  getNewHtml() {
+    return `
+    <a href=${this.instructionsLink} target="_blank">Instructions</a>
+    
+    <a href=${this.warrantyLink} target="_blank">Warranty</a> `;
+  }
+}
+
+const appliance = new Applicance({
+  id: "54e0eccd-8f36-462b-b68a-8182611d9add",
+  image: "images/products/black-2-slot-toaster.jpg",
+  prodName: "2 Slot Toaster - Black",
+  rating: {
+    stars: 5,
+    count: 2197,
+  },
+  priceCents: 1899,
+  keywords: ["toaster", "kitchen", "appliances"],
+  type: "appliance",
+  instructionsLink: "images/appliance-instructions.png",
+  warrantyLink: "images/appliance-warranty.png",
+});
 
 export const products = [
   {
@@ -54,6 +124,9 @@ export const products = [
     },
     priceCents: 1899,
     keywords: ["toaster", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
   },
   {
     id: "3ebe75dc-64d2-4137-8860-1f5a963e534b",
@@ -188,6 +261,9 @@ export const products = [
     },
     priceCents: 3074,
     keywords: ["water boiler", "appliances", "kitchen"],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
   },
   {
     id: "6b07d4e7-f540-454e-8a1e-363f25dbae7d",
@@ -402,6 +478,9 @@ export const products = [
     },
     priceCents: 2250,
     keywords: ["coffeemakers", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
   },
   {
     id: "02e3a47e-dd68-467e-9f71-8bf6f723fdae",
@@ -446,6 +525,9 @@ export const products = [
     },
     priceCents: 10747,
     keywords: ["food blenders", "kitchen", "appliances"],
+    type: "appliance",
+    instructionsLink: "images/appliance-instructions.png",
+    warrantyLink: "images/appliance-warranty.png",
   },
   {
     id: "36c64692-677f-4f58-b5ec-0dc2cf109e27",
@@ -480,4 +562,11 @@ export const products = [
     priceCents: 2400,
     keywords: ["sweaters", "hoodies", "apparel", "mens"],
   },
-];
+].map((prodDetails) => {
+  if (prodDetails.type === "clothing") {
+    return new Clothing(prodDetails);
+  } else if (prodDetails.keywords.includes("appliances")) {
+    return new Applicance(prodDetails);
+  }
+  return new Products(prodDetails);
+});

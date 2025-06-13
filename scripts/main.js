@@ -1,6 +1,5 @@
-import { cart, addCartItems, loadCartQuantity } from "../data/cart.js";
+import { cart } from "../data/cart-class.js";
 import { products } from "../data/products.js";
-import { priceInCent } from "./utility/price.js";
 
 let productHtml = " ";
 products.forEach((product) => {
@@ -20,14 +19,14 @@ products.forEach((product) => {
           <div class="product-rating-container">
             <img
               class="product-rating-stars"
-              src="images/ratings/rating-${product.rating.stars * 10}.png"
+              src="${product.getRating()}"
             />
             <div class="product-rating-count link-primary">${
               product.rating.count
             }</div>
           </div>
 
-          <div class="product-price">${priceInCent(product.priceCents)}</div>
+          <div class="product-price">${product.getPrice()}</div>
 
           <div class="product-quantity-container">
             <select class="js-selected-${product.id}">
@@ -44,6 +43,7 @@ products.forEach((product) => {
             </select>
           </div>
 
+          ${product.getNewHtml()}
           <div class="product-spacer"></div>
 
           <div class="added-to-cart js-add-${product.id}">
@@ -60,15 +60,24 @@ products.forEach((product) => {
     `;
 });
 document.querySelector(".js-products-section").innerHTML = productHtml;
+function loadCartQuantity() {
+  let cartQuantity = 0;
+  cart.cartItem.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+}
+loadCartQuantity();
 
 let checkTimeOut = {};
-loadCartQuantity();
+
 document.querySelectorAll(".js-add-to-cart").forEach((btn) => {
   btn.addEventListener("click", () => {
     let { prodId } = btn.dataset;
     let { prodPrice } = btn.dataset;
 
-    addCartItems(prodId, prodPrice);
+    cart.addCartItems(prodId, prodPrice);
     loadCartQuantity();
 
     const showAddedMsg = document.querySelector(`.js-add-${prodId}`);

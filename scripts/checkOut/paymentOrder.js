@@ -1,6 +1,6 @@
-import { cart } from "../../data/cart.js";
+import { cart } from "../../data/cart-class.js";
 import { deliveryOptionCost } from "../../data/deliveryOption.js";
-import { getProductId, products } from "../../data/products.js";
+import { getProductId } from "../../data/products.js";
 import { priceInCent } from "../utility/price.js";
 
 export function paymentOrder() {
@@ -8,12 +8,13 @@ export function paymentOrder() {
   let cost = 0;
   let shippingCost = 0;
   let beforeTaxCost = 0;
-  cart.forEach((cartItem) => {
-    const matchingId = getProductId(cartItem.id);
 
-    cost += cartItem.quantity * matchingId.priceCents;
+  cart.cartItem.forEach((cartItems) => {
+    const matchingId = getProductId(cartItems.id);
 
-    const options = deliveryOptionCost(cartItem.deliveryId);
+    cost += cartItems.quantity * matchingId.priceCents;
+
+    const options = deliveryOptionCost(cartItems.deliveryId);
 
     shippingCost += options.priceCents;
   });
@@ -66,7 +67,7 @@ export function paymentOrder() {
 
   function updateProductQuantity() {
     let cartQuantity = 0;
-    cart.forEach((cartItem) => {
+    cart.cartItem.forEach((cartItem) => {
       cartQuantity += cartItem.quantity;
     });
     return `Items (${cartQuantity})`;

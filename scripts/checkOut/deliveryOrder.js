@@ -1,13 +1,7 @@
-import { products, getProductId } from "../../data/products.js";
-import {
-  cart,
-  deleteFromCart,
-  saveCartToStorage,
-  updateCartQuantity,
-  updateDeliveryOption,
-} from "../../data/cart.js";
+import { getProductId } from "../../data/products.js";
+import { cart } from "../../data/cart-class.js";
 import { priceInCent } from "../utility/price.js";
-import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
+
 import {
   deliveryOption,
   deliveryOptionCost,
@@ -17,7 +11,8 @@ import { getDeliveryDays } from "../../data/deliveryOption.js";
 
 export function modifyViewPage() {
   let checkOutHtml = " ";
-  cart.forEach((checkOutItems) => {
+
+  cart.cartItem.forEach((checkOutItems) => {
     const product = checkOutItems.id;
     const matchingId = getProductId(product);
 
@@ -38,9 +33,7 @@ export function modifyViewPage() {
               />
               <div class="cart-item-details">
                 <div class="product-name">${matchingId.prodName}</div>
-                <div class="product-price">${priceInCent(
-                  matchingId.priceCents
-                )}</div>
+                <div class="product-price">${matchingId.getPrice()}</div>
                 <div class="product-quantity">
                   <span> Quantity: <span class="quantity-label-${
                     matchingId.id
@@ -117,7 +110,7 @@ export function modifyViewPage() {
   document.querySelectorAll(".js-delete-btn").forEach((delItem) => {
     delItem.addEventListener("click", () => {
       let productId = delItem.dataset.productId;
-      deleteFromCart(productId);
+      cart.deleteFromCart(productId);
 
       let cartContainer = document.querySelector(
         `.js-cart-container-${productId}`
@@ -166,8 +159,9 @@ export function modifyViewPage() {
       );
       let getQualityInput = Number(qualityInput.value);
       quantityValue.innerHTML = getQualityInput;
-      updateCartQuantity(productId, getQualityInput);
-      saveCartToStorage();
+      cart.updateCartQuantity(productId, getQualityInput);
+      cart.saveCartToStorage();
+      checkOutBox();
       validateInput(getQualityInput);
       paymentOrder();
     });
@@ -188,8 +182,9 @@ export function modifyViewPage() {
         cartContainer.classList.remove("is-display-link");
         removeUpdate.classList.remove("remove-update-text");
         quantityValue.classList.remove("remove-update-text");
-        updateCartQuantity(productId, getQualityInput);
-        saveCartToStorage();
+        cart.updateCartQuantity(productId, getQualityInput);
+        cart.saveCartToStorage();
+        checkOutBox();
         validateInput(getQualityInput);
         paymentOrder();
       }
@@ -200,7 +195,7 @@ export function modifyViewPage() {
 
   function checkOutBox() {
     let checkOutItem = 0;
-    cart.forEach((cartItems) => {
+    cart.cartItem.forEach((cartItems) => {
       checkOutItem += cartItems.quantity;
     });
     document.querySelector(
@@ -221,7 +216,7 @@ export function modifyViewPage() {
   document.querySelectorAll(".js-delivery-option").forEach((deliveryItem) => {
     deliveryItem.addEventListener("click", () => {
       const { productId, deliveryId } = deliveryItem.dataset;
-      updateDeliveryOption(productId, deliveryId);
+      cart.updateDeliveryOption(productId, deliveryId);
       modifyViewPage();
       paymentOrder();
     });
