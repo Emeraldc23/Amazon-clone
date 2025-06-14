@@ -1,9 +1,12 @@
 import { cart } from "../data/cart-class.js";
-import { products } from "../data/products.js";
+import { products, generateProducts } from "../data/products.js";
 
-let productHtml = " ";
-products.forEach((product) => {
-  productHtml += `
+generateProducts(productPage);
+
+function productPage() {
+  let productHtml = " ";
+  products.forEach((product) => {
+    productHtml += `
     <div class="product-container">
           <div class="product-image-container">
             <img
@@ -13,7 +16,7 @@ products.forEach((product) => {
           </div>
 
           <div class="product-name limit-text-to-2-lines">
-            ${product.prodName}
+            ${product.name}
           </div>
 
           <div class="product-rating-container">
@@ -58,40 +61,41 @@ products.forEach((product) => {
           >Add to Cart</button>
         </div>
     `;
-});
-document.querySelector(".js-products-section").innerHTML = productHtml;
-function loadCartQuantity() {
-  let cartQuantity = 0;
-  cart.cartItem.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
   });
+  document.querySelector(".js-products-section").innerHTML = productHtml;
+  function loadCartQuantity() {
+    let cartQuantity = 0;
+    cart.cartItem.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
 
-  document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+    document.querySelector(".js-cart-quantity").innerHTML = cartQuantity;
+  }
+  loadCartQuantity();
+
+  let checkTimeOut = {};
+
+  document.querySelectorAll(".js-add-to-cart").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      let { prodId } = btn.dataset;
+      let { prodPrice } = btn.dataset;
+
+      cart.addCartItems(prodId, prodPrice);
+      loadCartQuantity();
+
+      const showAddedMsg = document.querySelector(`.js-add-${prodId}`);
+      showAddedMsg.classList.add("display-added-msg");
+
+      const checkPreviousTimeOut = checkTimeOut[prodId];
+
+      if (checkPreviousTimeOut) {
+        clearInterval(checkPreviousTimeOut);
+      }
+
+      const timeOutId = setTimeout(() => {
+        showAddedMsg.classList.remove("display-added-msg");
+      }, 2000);
+      checkTimeOut[prodId] = timeOutId;
+    });
+  });
 }
-loadCartQuantity();
-
-let checkTimeOut = {};
-
-document.querySelectorAll(".js-add-to-cart").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    let { prodId } = btn.dataset;
-    let { prodPrice } = btn.dataset;
-
-    cart.addCartItems(prodId, prodPrice);
-    loadCartQuantity();
-
-    const showAddedMsg = document.querySelector(`.js-add-${prodId}`);
-    showAddedMsg.classList.add("display-added-msg");
-
-    const checkPreviousTimeOut = checkTimeOut[prodId];
-
-    if (checkPreviousTimeOut) {
-      clearInterval(checkPreviousTimeOut);
-    }
-
-    const timeOutId = setTimeout(() => {
-      showAddedMsg.classList.remove("display-added-msg");
-    }, 2000);
-    checkTimeOut[prodId] = timeOutId;
-  });
-});

@@ -3,7 +3,7 @@ import { priceInCent } from "../scripts/utility/price.js";
 export function getProductId(productId) {
   let matchingId;
   products.forEach((productItem) => {
-    if (productId === productItem.id) {
+    if (productItem.id === productId) {
       matchingId = productItem;
     }
   });
@@ -13,14 +13,14 @@ export function getProductId(productId) {
 class Products {
   id;
   image;
-  prodName;
+  name;
   rating;
   priceCents;
 
   constructor(prodDetails) {
     this.id = prodDetails.id;
     this.image = prodDetails.image;
-    this.prodName = prodDetails.prodName;
+    this.name = prodDetails.name;
     this.rating = prodDetails.rating;
     this.priceCents = prodDetails.priceCents;
   }
@@ -47,7 +47,7 @@ class Clothing extends Products {
   }
 }
 
-class Applicance extends Products {
+class Appliance extends Products {
   instructionsLink;
   warrantyLink;
   constructor(prodDetails) {
@@ -63,21 +63,27 @@ class Applicance extends Products {
   }
 }
 
-const appliance = new Applicance({
-  id: "54e0eccd-8f36-462b-b68a-8182611d9add",
-  image: "images/products/black-2-slot-toaster.jpg",
-  prodName: "2 Slot Toaster - Black",
-  rating: {
-    stars: 5,
-    count: 2197,
-  },
-  priceCents: 1899,
-  keywords: ["toaster", "kitchen", "appliances"],
-  type: "appliance",
-  instructionsLink: "images/appliance-instructions.png",
-  warrantyLink: "images/appliance-warranty.png",
-});
+export let products = [];
 
+export function generateProducts(func) {
+  const html = new XMLHttpRequest();
+  html.addEventListener("load", () => {
+    products = JSON.parse(html.response).map((prodDetails) => {
+      if (prodDetails.type === "clothing") {
+        return new Clothing(prodDetails);
+      } else if (prodDetails.keywords.includes("appliances")) {
+        return new Appliance(prodDetails);
+      }
+      return new Products(prodDetails);
+    });
+    console.log(products);
+
+    func();
+  });
+  html.open("GET", "https://supersimplebackend.dev/products");
+  html.send();
+}
+/*
 export const products = [
   {
     id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
@@ -569,4 +575,4 @@ export const products = [
     return new Applicance(prodDetails);
   }
   return new Products(prodDetails);
-});
+}); */

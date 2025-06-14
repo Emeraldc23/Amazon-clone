@@ -10,9 +10,11 @@ export function paymentOrder() {
   let beforeTaxCost = 0;
 
   cart.cartItem.forEach((cartItems) => {
-    const matchingId = getProductId(cartItems.id);
+    const product = cartItems.id;
+    const matchingId = getProductId(product);
 
     cost += cartItems.quantity * matchingId.priceCents;
+    console.log(cartItems);
 
     const options = deliveryOptionCost(cartItems.deliveryId);
 
@@ -73,4 +75,6 @@ export function paymentOrder() {
     return `Items (${cartQuantity})`;
   }
 }
-paymentOrder();
+document.onload = () => {
+  paymentOrder();
+};

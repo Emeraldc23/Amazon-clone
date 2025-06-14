@@ -32,7 +32,7 @@ export function modifyViewPage() {
                 class="product-image" src="${matchingId.image}"
               />
               <div class="cart-item-details">
-                <div class="product-name">${matchingId.prodName}</div>
+                <div class="product-name">${matchingId.name}</div>
                 <div class="product-price">${matchingId.getPrice()}</div>
                 <div class="product-quantity">
                   <span> Quantity: <span class="quantity-label-${
