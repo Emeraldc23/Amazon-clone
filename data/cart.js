@@ -1,4 +1,10 @@
-export let cart;
+export async function loadCartFetch() {
+  const getText = fetch("https://supersimplebackend.dev/cart");
+  console.log(getText);
+}
+loadCartFetch();
+
+/* export let cart;
 
 logFromStorage();
 
@@ -99,3 +105,4 @@ export function updateDeliveryOption(prodId, deliveryOptionId) {
   matchingId.deliveryId = deliveryOptionId;
   saveCartToStorage();
 }
+ */

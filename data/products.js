@@ -84,7 +84,7 @@ export function generateProductsFetch() {
   return fetchProducts;
 }
 
-export function generateProducts(func) {
+/* export function generateProducts(func) {
   const html = new XMLHttpRequest();
   html.addEventListener("load", () => {
     products = JSON.parse(html.response).map((prodDetails) => {
@@ -101,7 +101,7 @@ export function generateProducts(func) {
   });
   html.open("GET", "https://supersimplebackend.dev/products");
   html.send();
-}
+} */
 
 /*
 export const products = [
